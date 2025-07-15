@@ -49,7 +49,6 @@ class Ant:
         """
         self.path.append(next_node)
         self.visited.add(next_node)
-        # Assuming the graph has 'length' attribute for edges
         edge_data = self.graph.get_edge_data(self.path[-2], self.path[-1])
         if edge_data and 'length' in edge_data[0]:
             self.path_distance += edge_data[0]['length']
@@ -62,7 +61,6 @@ class Ant:
             float: The total distance of the tour.
         """
         return self.path_distance
-
 
 class ACOptimizer:
     """
@@ -137,8 +135,6 @@ class ACOptimizer:
 
         for _ in range(iterations):
             for ant in self.ants:
-                # This is a simplified tour construction.
-                # A more complete implementation would involve constructing the full tour.
                 pass
 
             self._update_pheromones()
