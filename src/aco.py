@@ -199,7 +199,7 @@ class ACOptimizer:
 
         return global_best_path, global_best_distance
 
-    def _update_pheromones(self) -> None:
+    def _update_pheromones(self, ants: List[Ant]) -> None:
         """
         Updates the pheromone matrix after each iteration.
 
@@ -220,4 +220,5 @@ class ACOptimizer:
             pheromone_deposit = 1.0 / path_distance
             for i in range(len(ant.path) - 1):
                 edge = (ant.path[i], ant.path[i + 1])
-                self.pheromones[edge] += pheromone_deposit
+                if edge in self.pheromones:
+                    self.pheromones[edge] += pheromone_deposit
