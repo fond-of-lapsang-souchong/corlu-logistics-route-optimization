@@ -31,6 +31,55 @@ class Ant:
         self.path_distance: float = 0.0
         self.visited: set[int] = {start_node}
 
+    def reset(self) -> None:
+        """
+        Resets the ant's path, distance, and visited nodes to the initial state.
+        """
+        self.path = [self.start_node]
+        self.path_distance = 0.0
+        self.visited = {self.start_node}
+
+    def _select_next_node(self, pheromones: dict, alpha: float, beta: float, all_nodes: list) -> int:
+        """
+        Selects the next node to visit based on pheromone levels and distance.
+
+        Args:
+            pheromones (dict): The pheromone matrix.
+            alpha (float): The influence of the pheromone levels.
+            beta (float): The influence of the heuristic information (distance).
+            all_nodes (list): A list of all nodes in the graph.
+
+        Returns:
+            int: The next node to visit.
+        """
+        import numpy as np
+
+        current_node = self.path[-1]
+        unvisited_nodes = [node for node in all_nodes if node not in self.visited]
+
+        if not unvisited_nodes:
+            return self.start_node 
+
+        probabilities = []
+        for next_node in unvisited_nodes:
+            edge = (current_node, next_node)
+            pheromone = pheromones.get(edge, 1.0)
+
+            edge_data = self.graph.get_edge_data(current_node, next_node)
+            distance = edge_data[0]['length'] if edge_data and 'length' in edge_data[0] else float('inf')
+
+            heuristic = 1.0 / distance if distance != 0 else float('inf')
+
+            probabilities.append((pheromone ** alpha) * (heuristic ** beta))
+
+        probabilities = np.array(probabilities)
+        if np.sum(probabilities) == 0:
+            return np.random.choice(unvisited_nodes)
+
+        probabilities /= np.sum(probabilities)
+
+        return np.random.choice(unvisited_nodes, p=probabilities)
+      
     def _select_next_node(self) -> int:
         """
         Selects the next node to visit based on pheromone levels and distance.
@@ -49,6 +98,7 @@ class Ant:
         """
         self.path.append(next_node)
         self.visited.add(next_node)
+        
         edge_data = self.graph.get_edge_data(self.path[-2], self.path[-1])
         if edge_data and 'length' in edge_data[0]:
             self.path_distance += edge_data[0]['length']
@@ -133,9 +183,22 @@ class ACOptimizer:
         best_path = []
         best_distance = float('inf')
 
+        all_nodes = list(self.graph.nodes)
+
+        for _ in range(iterations):
+            for ant in self.ants:
+                ant.reset()
+                while len(ant.visited) < len(self.nodes_to_visit):
+                    next_node = ant._select_next_node(self.pheromones, self.alpha, self.beta, all_nodes)
+                    ant._update_path(next_node)
+
+                # Complete the tour by returning to the start node
+                ant._update_path(ant.start_node)
+
         for _ in range(iterations):
             for ant in self.ants:
                 pass
+
 
             self._update_pheromones()
 
