@@ -49,7 +49,6 @@ class Ant:
         """
         self.path.append(next_node)
         self.visited.add(next_node)
-        # Assuming the graph has 'length' attribute for edges
         edge_data = self.graph.get_edge_data(self.path[-2], self.path[-1])
         if edge_data and 'length' in edge_data[0]:
             self.path_distance += edge_data[0]['length']
@@ -62,3 +61,109 @@ class Ant:
             float: The total distance of the tour.
         """
         return self.path_distance
+
+class ACOptimizer:
+    """
+    Manages the entire Ant Colony Optimization process.
+
+    This class initializes the pheromone matrix, runs the main optimization
+    loop, and manages the colony of ants to find the best path.
+
+    Attributes:
+        graph (osmnx.graph): The graph on which the optimization is performed.
+        ants (List[Ant]): The list of ants in the colony.
+        nodes_to_visit (List[int]): A list of all nodes that must be visited.
+        alpha (float): The influence of the pheromone levels.
+        beta (float): The influence of the heuristic information (distance).
+        evaporation_rate (float): The rate at which pheromones evaporate.
+        pheromones (dict): A dictionary representing the pheromone matrix.
+    """
+
+    def __init__(
+        self,
+        graph: ox.graph,
+        ants: List[Ant],
+        nodes_to_visit: List[int],
+        alpha: float,
+        beta: float,
+        evaporation_rate: float,
+    ):
+        """
+        Initializes the ACOptimizer.
+
+        Args:
+            graph (osmnx.graph): The graph for the optimization.
+            ants (List[Ant]): The colony of ants.
+            nodes_to_visit (List[int]): The list of nodes to be visited.
+            alpha (float): The pheromone influence factor.
+            beta (float): The heuristic influence factor.
+            evaporation_rate (float): The pheromone evaporation rate.
+        """
+        self.graph = graph
+        self.ants = ants
+        self.nodes_to_visit = nodes_to_visit
+        self.alpha = alpha
+        self.beta = beta
+        self.evaporation_rate = evaporation_rate
+        self.pheromones = self._init_pheromones()
+
+    def _init_pheromones(self) -> dict:
+        """
+        Initializes the pheromone matrix for all edges in the graph.
+
+        Returns:
+            dict: The initialized pheromone matrix.
+        """
+        pheromones = {}
+        for u, v in self.graph.edges():
+            pheromones[(u, v)] = 1.0
+            pheromones[(v, u)] = 1.0
+        return pheromones
+
+    def run(self, iterations: int) -> tuple[List[int], float]:
+        """
+        Runs the main ACO optimization loop.
+
+        Args:
+            iterations (int): The number of iterations to run the optimization.
+
+        Returns:
+            tuple[List[int], float]: The best path found and its distance.
+        """
+        best_path = []
+        best_distance = float('inf')
+
+        for _ in range(iterations):
+            for ant in self.ants:
+                pass
+
+            self._update_pheromones()
+
+            for ant in self.ants:
+                if ant.get_path_distance() < best_distance:
+                    best_distance = ant.get_path_distance()
+                    best_path = ant.path
+        return best_path, best_distance
+
+    def _update_pheromones(self) -> None:
+        """
+        Updates the pheromone matrix after each iteration.
+
+        This involves two steps:
+        1. Evaporation: All pheromone trails are reduced by a certain factor.
+        2. Deposition: Ants deposit new pheromones on the paths they traveled,
+           proportional to the quality of their tours.
+        """
+        # Evaporation
+        for edge in self.pheromones:
+            self.pheromones[edge] *= (1 - self.evaporation_rate)
+
+        # Deposition
+        for ant in self.ants:
+            path_distance = ant.get_path_distance()
+            if path_distance == 0:
+                continue
+            pheromone_deposit = 1.0 / path_distance
+            for i in range(len(ant.path) - 1):
+                edge = (ant.path[i], ant.path[i + 1])
+                self.pheromones[edge] += pheromone_deposit
