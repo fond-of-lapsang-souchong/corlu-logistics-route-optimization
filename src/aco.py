@@ -79,15 +79,6 @@ class Ant:
         probabilities /= np.sum(probabilities)
 
         return np.random.choice(unvisited_nodes, p=probabilities)
-      
-    def _select_next_node(self) -> int:
-        """
-        Selects the next node to visit based on pheromone levels and distance.
-
-        Returns:
-            int: The next node to visit.
-        """
-        pass
 
     def _update_path(self, next_node: int) -> None:
         """
@@ -172,41 +163,41 @@ class ACOptimizer:
 
     def run(self, iterations: int) -> tuple[List[int], float]:
         """
-        Runs the main ACO optimization loop.
-
-        Args:
-            iterations (int): The number of iterations to run the optimization.
-
-        Returns:
-            tuple[List[int], float]: The best path found and its distance.
+        Runs the main ACO optimization loop using the superior structure.
         """
-        best_path = []
-        best_distance = float('inf')
+        global_best_path = []
+        global_best_distance = float('inf')
 
-        all_nodes = list(self.graph.nodes)
+        all_possible_nodes = list(self.graph.nodes())
 
-        for _ in range(iterations):
+        for i in range(iterations):
+            all_tours = [] 
+
             for ant in self.ants:
                 ant.reset()
+
                 while len(ant.visited) < len(self.nodes_to_visit):
-                    next_node = ant._select_next_node(self.pheromones, self.alpha, self.beta, all_nodes)
+                    next_node = ant._select_next_node(
+                        self.pheromones, self.alpha, self.beta, all_possible_nodes
+                    )
+                    if next_node is None:
+                        break
                     ant._update_path(next_node)
-
-                # Complete the tour by returning to the start node
+            
                 ant._update_path(ant.start_node)
+                all_tours.append(ant)
 
-        for _ in range(iterations):
-            for ant in self.ants:
-                pass
+            self._update_pheromones(all_tours)
 
+            for ant in all_tours:
+                current_distance = ant.get_path_distance()
+                if current_distance < global_best_distance:
+                    global_best_distance = current_distance
+                    global_best_path = ant.path
 
-            self._update_pheromones()
+            print(f"İterasyon {i+1}: En İyi Mesafe = {global_best_distance:.2f} m")
 
-            for ant in self.ants:
-                if ant.get_path_distance() < best_distance:
-                    best_distance = ant.get_path_distance()
-                    best_path = ant.path
-        return best_path, best_distance
+        return global_best_path, global_best_distance
 
     def _update_pheromones(self) -> None:
         """
