@@ -39,60 +39,56 @@ class Ant:
         self.path_distance = 0.0
         self.visited = {self.start_node}
 
-    def _select_next_node(self, pheromones: dict, alpha: float, beta: float, all_nodes: list) -> int:
+    def _select_next_node(self, pheromones: dict, nodes_to_visit: list, alpha: float, beta: float) -> int:
         """
-        Selects the next node to visit based on pheromone levels and distance.
-
-        Args:
-            pheromones (dict): The pheromone matrix.
-            alpha (float): The influence of the pheromone levels.
-            beta (float): The influence of the heuristic information (distance).
-            all_nodes (list): A list of all nodes in the graph.
-
-        Returns:
-            int: The next node to visit.
+        Selects the next node to visit from the list of required stops.
         """
         import numpy as np
 
         current_node = self.path[-1]
-        unvisited_nodes = [node for node in all_nodes if node not in self.visited]
+        candidate_nodes = [node for node in nodes_to_visit if node not in self.visited]
 
-        if not unvisited_nodes:
-            return self.start_node 
+        if not candidate_nodes:
+            return self.start_node
 
         probabilities = []
-        for next_node in unvisited_nodes:
+        for next_node in candidate_nodes:
             edge = (current_node, next_node)
             pheromone = pheromones.get(edge, 1.0)
-
-            edge_data = self.graph.get_edge_data(current_node, next_node)
-            distance = edge_data[0]['length'] if edge_data and 'length' in edge_data[0] else float('inf')
+            try:
+                distance = ox.shortest_path_length(self.graph, current_node, next_node, weight='length')
+            except:
+                distance = float('inf') # Arada yol yoksa mesafe sonsuzdur
 
             heuristic = 1.0 / distance if distance != 0 else float('inf')
 
             probabilities.append((pheromone ** alpha) * (heuristic ** beta))
 
         probabilities = np.array(probabilities)
-        if np.sum(probabilities) == 0:
-            return np.random.choice(unvisited_nodes)
+        if np.sum(probabilities) == 0 or np.isinf(np.sum(probabilities)):
+            return np.random.choice(candidate_nodes)
 
         probabilities /= np.sum(probabilities)
 
-        return np.random.choice(unvisited_nodes, p=probabilities)
+        return np.random.choice(candidate_nodes, p=probabilities)
 
     def _update_path(self, next_node: int) -> None:
         """
-        Updates the ant's path with the next node.
-
-        Args:
-            next_node (int): The next node to add to the path.
+        Updates the ant's path with the next node and calculates the
+        REAL travel distance between the last node and the new node.
         """
+        import networkx as nx
+        
+        last_node = self.path[-1]
+
         self.path.append(next_node)
         self.visited.add(next_node)
-        
-        edge_data = self.graph.get_edge_data(self.path[-2], self.path[-1])
-        if edge_data and 'length' in edge_data[0]:
-            self.path_distance += edge_data[0]['length']
+
+        try:
+            distance = nx.shortest_path_length(self.graph, last_node, next_node, weight='length')
+            self.path_distance += distance
+        except (nx.NetworkXNoPath, nx.NodeNotFound):
+            self.path_distance += float('inf')
 
     def get_path_distance(self) -> float:
         """
@@ -178,7 +174,7 @@ class ACOptimizer:
 
                 while len(ant.visited) < len(self.nodes_to_visit):
                     next_node = ant._select_next_node(
-                        self.pheromones, self.alpha, self.beta, all_possible_nodes
+                        self.pheromones, self.nodes_to_visit, self.alpha, self.beta
                     )
                     if next_node is None:
                         break
