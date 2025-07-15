@@ -58,14 +58,13 @@ class Ant:
         unvisited_nodes = [node for node in all_nodes if node not in self.visited]
 
         if not unvisited_nodes:
-            return self.start_node  # Return to start if all nodes are visited
+            return self.start_node 
 
         probabilities = []
         for next_node in unvisited_nodes:
             edge = (current_node, next_node)
             pheromone = pheromones.get(edge, 1.0)
 
-            # Use a default distance if edge is not found
             edge_data = self.graph.get_edge_data(current_node, next_node)
             distance = edge_data[0]['length'] if edge_data and 'length' in edge_data[0] else float('inf')
 
@@ -75,12 +74,20 @@ class Ant:
 
         probabilities = np.array(probabilities)
         if np.sum(probabilities) == 0:
-            # If all probabilities are zero, choose randomly
             return np.random.choice(unvisited_nodes)
 
         probabilities /= np.sum(probabilities)
 
         return np.random.choice(unvisited_nodes, p=probabilities)
+      
+    def _select_next_node(self) -> int:
+        """
+        Selects the next node to visit based on pheromone levels and distance.
+
+        Returns:
+            int: The next node to visit.
+        """
+        pass
 
     def _update_path(self, next_node: int) -> None:
         """
@@ -91,7 +98,7 @@ class Ant:
         """
         self.path.append(next_node)
         self.visited.add(next_node)
-        # Assuming the graph has 'length' attribute for edges
+        
         edge_data = self.graph.get_edge_data(self.path[-2], self.path[-1])
         if edge_data and 'length' in edge_data[0]:
             self.path_distance += edge_data[0]['length']
@@ -104,7 +111,6 @@ class Ant:
             float: The total distance of the tour.
         """
         return self.path_distance
-
 
 class ACOptimizer:
     """
@@ -188,6 +194,11 @@ class ACOptimizer:
 
                 # Complete the tour by returning to the start node
                 ant._update_path(ant.start_node)
+
+        for _ in range(iterations):
+            for ant in self.ants:
+                pass
+
 
             self._update_pheromones()
 
