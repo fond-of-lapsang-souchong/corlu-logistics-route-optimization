@@ -2,3 +2,6 @@
 .ipynb_checkpoints/
 notebooks/cache/
 __pycache__/
+*.pyc
+*.html
+data/cache/

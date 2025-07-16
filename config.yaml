@@ -1,0 +1,19 @@
+location:
+  place_name: "Çorlu, Tekirdağ, Türkiye"
+
+problem:
+  num_stops: 10
+
+aco:
+  ant_count: 20
+
+  iterations: 50
+
+  alpha: 1.0
+
+  beta: 5.0
+
+  evaporation_rate: 0.5
+
+output:
+  map_filename: "corlu_optimized_route.html"
