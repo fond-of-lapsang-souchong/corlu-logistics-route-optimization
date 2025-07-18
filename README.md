@@ -1,71 +1,39 @@
-# Proje Adı: ACO-TR-LOGISTICS
+# Proje: ACO-TR-LOGISTICS
 
-Bu proje, Türkiye'deki lojistik operasyonları için **Karınca Kolonisi Optimizasyonu (Ant Colony Optimization - ACO)** algoritmasını kullanarak rota optimizasyonu gerçekleştirmeyi amaçlayan bir Python uygulamasıdır. Projenin temel hedefi, belirli teslimat noktaları arasında seyahat süresini, mesafeyi ve maliyeti en aza indiren en verimli rotaları bulmaktır.
+Bu proje, Karınca Kolonisi Optimizasyonu (ACO) algoritmasının arkasındaki mantığı anlamak ve gerçek dünya verileriyle denemek için kişisel bir hevesle geliştirilmiştir.
 
-## Projenin Amacı
+Eğer siz de denemek isterseniz, aşağıdaki adımları izleyebilirsiniz.
 
-- **Verimlilik Artışı:** Lojistik ağındaki araçlar için en kısa ve en hızlı rotaları belirleyerek operasyonel verimliliği artırmak.
-- **Maliyet Düşürme:** Yakıt tüketimini ve zaman maliyetlerini minimize etmek.
-- **Dinamik Rota Planlama:** Gerçek dünya yol ağları üzerinden dinamik ve optimize edilmiş rotalar oluşturmak.
-- **Görselleştirme:** Optimize edilen rotaları interaktif haritalar üzerinde görselleştirerek analizi kolaylaştırmak.
+## Nasıl Çalıştırılır?
 
-## Kullanılacak Teknolojiler
-
-- **Python:** Projenin ana programlama dili.
-- **OSMnx:** OpenStreetMap verilerini çekmek, modellemek ve analiz etmek için kullanılan kütüphane. Yol ağlarını ve mesafeleri elde etmek için kullanılacaktır.
-- **NumPy:** Hızlı ve verimli sayısal hesaplamalar, özellikle mesafe matrisleri oluşturmak için kullanılacaktır.
-- **Folium:** Optimize edilmiş rotaların interaktif Leaflet haritaları üzerinde görselleştirilmesi için kullanılacaktır.
-- **VSCodium:** Projenin geliştirileceği özgür ve açık kaynak kodlu IDE.
-
-## Kurulum Adımları
-
-Projeyi yerel makinenizde çalıştırmak için aşağıdaki adımları izleyin.
-
-### 1. Projeyi Klonlama
-
+#### 1. Projeyi Bilgisayarınıza İndirin
 ```bash
-git clone <proje_repository_adresi>
+git clone https://github.com/fond-of-lapsang-souchong/ACO-TR-LOGISTICS.git
 cd ACO-TR-LOGISTICS
 ```
 
-### 2. Sanal Ortam Oluşturma
-
-Proje bağımlılıklarını sisteminizdeki diğer Python paketlerinden izole etmek için bir sanal ortam (virtual environment) oluşturmak en iyi pratiktir.
-
+#### 2. Sanal Ortamı Kurun ve Aktif Edin
+Bu, proje için gerekli kütüphanelerin bilgisayarınızdaki diğer projelere karışmasını engeller.
 ```bash
-python -m venv venv
+# Sanal ortamı oluşturun
+python -m venv .venv
+
+# Aktif hale getirin (macOS / Linux için)
+source .venv/bin/activate
 ```
 
-### 3. Sanal Ortamı Aktif Etme
-
-**Windows için:**
-```powershell
-.\venv\Scripts\Activate.ps1
-```
-veya
-```cmd
-.\venv\Scripts\activate
-```
-
-**macOS / Linux için:**
-```bash
-source venv/bin/activate
-```
-
-Terminalinizin başında `(venv)` ifadesini gördüğünüzde sanal ortam aktif olmuş demektir.
-
-### 4. Bağımlılıkları Yükleme
-
-Gerekli tüm Python kütüphanelerini `requirements.txt` dosyası üzerinden yükleyin.
-
+#### 3. Gerekli Kütüphaneleri Yükleyin
 ```bash
 pip install -r requirements.txt
 ```
 
-## Kullanım
-
-Kurulum tamamlandıktan sonra, projenin ana betiğini çalıştırarak optimizasyon sürecini başlatabilirsiniz.
-
+#### 4. Optimizasyonu Başlatın
+Aşağıdaki komut, `config.yaml` dosyasındaki ayarlara göre optimizasyonu çalıştıracaktır.
 ```bash
-python src/main.py
+python -m src.main
 ```
+
+İşlem tamamlandığında, projenin ana klasöründe **`corlu_optimized_route.html`** adında interaktif bir harita dosyası oluşturulacaktır. Bu dosyayı web tarayıcınızda açarak sonucu görebilirsiniz.
+
+## Ayarlar
+Farklı bir şehir denemek veya karınca sayısı gibi parametreleri değiştirmek isterseniz, **`config.yaml`** dosyasını düzenleyebilirsiniz.
