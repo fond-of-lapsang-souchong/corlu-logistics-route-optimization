@@ -1,0 +1,7 @@
+{
+  "name": "Çorlu Varsayılan Senaryo (10 Durak)",
+  "description": "Çorlu şehir merkezinden ve çevresinden rastgele seçilmiş 10 durak içeren standart test senaryosu.",
+  "nodes": [
+    12824907013, 2237320493, 2234950132, 2270207023, 9726230592, 2234934786, 4183264109, 1838160595, 2237330399, 3346617690
+  ]
+}
