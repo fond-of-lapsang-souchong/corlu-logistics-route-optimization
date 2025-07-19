@@ -6,34 +6,33 @@ Eğer siz de denemek isterseniz, aşağıdaki adımları izleyebilirsiniz.
 
 ## Nasıl Çalıştırılır?
 
-#### 1. Projeyi Bilgisayarınıza İndirin
+#### 1. Kurulum
 ```bash
+# Projeyi indir ve klasörüne git
 git clone https://github.com/fond-of-lapsang-souchong/ACO-TR-LOGISTICS.git
 cd ACO-TR-LOGISTICS
-```
 
-#### 2. Sanal Ortamı Kurun ve Aktif Edin
-Bu, proje için gerekli kütüphanelerin bilgisayarınızdaki diğer projelere karışmasını engeller.
-```bash
-# Sanal ortamı oluşturun
+# Sanal ortamı kur ve aktif et (macOS/Linux)
 python -m venv .venv
-
-# Aktif hale getirin (macOS / Linux için)
 source .venv/bin/activate
-```
 
-#### 3. Gerekli Kütüphaneleri Yükleyin
-```bash
+# Gerekli kütüphaneleri yükle
 pip install -r requirements.txt
 ```
 
-#### 4. Optimizasyonu Başlatın
-Aşağıdaki komut, `config.yaml` dosyasındaki ayarlara göre optimizasyonu çalıştıracaktır.
+#### 2. Çalıştırma Örnekleri
+
 ```bash
+# Varsayılan senaryoyu (config.yaml'da belirtilen) çalıştır
 python -m src.main
+
+# Akıllı durak seçimi (DBSCAN) stratejisini çalıştır
+python -m src.main --strategy dbscan
+
+# Farklı bir senaryo dosyasını çalıştır
+python -m src.main --scenario data/scenarios/corlu_merkez_15_durak.json
+
+# Rastgele 25 durak ve 100 iterasyonla özel bir deneme yap
+python -m src.main --strategy random --num_stops 25 --iterations 100
 ```
-
-İşlem tamamlandığında, projenin ana klasöründe **`corlu_optimized_route.html`** adında interaktif bir harita dosyası oluşturulacaktır. Bu dosyayı web tarayıcınızda açarak sonucu görebilirsiniz.
-
-## Ayarlar
-Farklı bir şehir denemek veya karınca sayısı gibi parametreleri değiştirmek isterseniz, **`config.yaml`** dosyasını düzenleyebilirsiniz.
+İşlem bitince, sonuç haritası projenin ana dizininde `.html` uzantısıyla oluşturulacaktır. Tüm varsayılan ayarlar için `config.yaml` dosyasına göz atabilirsin.
