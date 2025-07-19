@@ -2,7 +2,7 @@
 
 Bu proje, Karınca Kolonisi Optimizasyonu (ACO) algoritmasının arkasındaki mantığı anlamak ve gerçek dünya verileriyle denemek için kişisel bir hevesle geliştirilmiştir.
 
-Eğer siz de denemek isterseniz, aşağıdaki adımları izleyebilirsiniz.
+Basit bir Gezgin Satıcı Problemi (TSP) olarak başlayan bu serüven, zamanla kapasite kısıtlamaları ve çoklu araçları yönetebilen bir Araç Rotalama Problemi (VRP) çözüm aracına dönüştü. Geliştirme sürecinde, bir yol arkadaşı olarak güncel yapay zeka araçlarından da faydalanılmıştır.
 
 ## Nasıl Çalıştırılır?
 
@@ -21,9 +21,8 @@ pip install -r requirements.txt
 ```
 
 #### 2. Çalıştırma Örnekleri
-
 ```bash
-# Varsayılan senaryoyu (config.yaml'da belirtilen) çalıştır
+# config.yaml'daki varsayılan senaryo ve filo ile çalıştır
 python -m src.main
 
 # Akıllı durak seçimi (DBSCAN) stratejisini çalıştır
@@ -31,8 +30,14 @@ python -m src.main --strategy dbscan
 
 # Farklı bir senaryo dosyasını çalıştır
 python -m src.main --scenario data/scenarios/corlu_merkez_15_durak.json
-
-# Rastgele 25 durak ve 100 iterasyonla özel bir deneme yap
-python -m src.main --strategy random --num_stops 25 --iterations 100
 ```
-İşlem bitince, sonuç haritası projenin ana dizininde `.html` uzantısıyla oluşturulacaktır. Tüm varsayılan ayarlar için `config.yaml` dosyasına göz atabilirsin.
+İşlem bitince, sonuç haritası projenin ana dizininde `.html` uzantısıyla oluşturulacaktır. Tüm varsayılan ayarlar (araç filosu, optimizasyon parametreleri vb.) için `config.yaml` dosyasına göz atabilirsin.
+
+#### 3. Testleri Çalıştırma
+Projenin temel bileşenlerinin doğru çalıştığını doğrulamak için:
+```bash
+pytest
+```
+
+## Lisans
+Bu proje [MIT Lisansı](LICENSE) ile lisanslanmıştır.
