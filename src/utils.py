@@ -92,3 +92,35 @@ class DistanceCache:
             json.dump(str_key_cache, f, indent=4)
         
         print(f"{len(str_key_cache)} adet mesafe başarıyla kalıcı önbelleğe kaydedildi.")
+    
+def update_config_with_args(config: dict, args) -> dict:
+    """
+    Updates the configuration dictionary with arguments passed from the command line.
+
+    Args:
+        config (dict): The base configuration loaded from the YAML file.
+        args: The arguments object parsed by argparse.
+
+    Returns:
+        dict: The updated configuration dictionary.
+    """
+    arg_to_config_map = {
+        'strategy': ('problem', 'strategy'),
+        'num_stops': ('problem', 'num_stops'),
+        'scenario': ('problem', 'scenario_filepath'),
+        'ants': ('aco', 'ant_count'),
+        'iterations': ('aco', 'iterations'),
+        'output': ('output', 'map_filename'),
+    }
+
+    for arg_name, config_keys in arg_to_config_map.items():
+        arg_value = getattr(args, arg_name, None)
+        
+        if arg_value is not None:
+            temp_dict = config
+            for key in config_keys[:-1]:
+                temp_dict = temp_dict[key]
+            temp_dict[config_keys[-1]] = arg_value
+            print(f"Yapılandırma güncellendi: '{'.'.join(config_keys)}' -> {arg_value}")
+
+    return config

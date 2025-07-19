@@ -4,11 +4,14 @@ import yaml
 import random
 import time
 import json
-import argparse 
+import argparse
+import numpy as np
+from sklearn.cluster import DBSCAN
 
 from src.data_loader import load_graph
 from src.optimization import ACOptimizer
 from src.visualization.map_plotter import plot_optimized_route
+from src.utils import update_config_with_args
 
 def load_config(config_path: str = 'config.yaml') -> dict:
     print(f"'{config_path}' adresinden yapılandırma yükleniyor...")
@@ -49,18 +52,7 @@ def main():
     args = parse_arguments()
     config = load_config()
 
-    if args.strategy:
-        config['problem']['strategy'] = args.strategy
-    if args.num_stops:
-        config['problem']['num_stops'] = args.num_stops
-    if args.scenario:
-        config['problem']['scenario_filepath'] = args.scenario
-    if args.ants:
-        config['aco']['ant_count'] = args.ants
-    if args.iterations:
-        config['aco']['iterations'] = args.iterations
-    if args.output:
-        config['output']['map_filename'] = args.output
+    config = update_config_with_args(config, args)
     
     place_name = config['location']['place_name']
     print(f"\n'{place_name}' için yol ağı indiriliyor...")
@@ -101,6 +93,37 @@ def main():
         
         nodes_to_visit = random.sample(all_nodes, num_stops)
         print(f"Optimizasyon için {num_stops} adet rastgele durak seçildi.")
+
+    elif strategy == "dbscan":
+        print("DBSCAN stratejisi kullanılıyor: Coğrafi kümelerden duraklar seçilecek.")
+        dbscan_params = problem_config.get('dbscan', {})
+        eps = dbscan_params.get('eps', 0.01)
+        min_samples = dbscan_params.get('min_samples', 5)
+
+        nodes_data = G_undirected.nodes(data=True)
+        coords = np.array([[data['x'], data['y']] for _, data in nodes_data])
+        node_ids = np.array([node_id for node_id, _ in nodes_data])
+
+        db = DBSCAN(eps=eps, min_samples=min_samples).fit(coords)
+        
+        labels = db.labels_
+        unique_labels = set(labels)
+        
+        if -1 in unique_labels:
+            unique_labels.remove(-1)
+
+        print(f"DBSCAN {len(unique_labels)} adet yoğun küme buldu.")
+        
+        if not unique_labels:
+            print("HATA: DBSCAN hiçbir küme bulamadı. Lütfen 'eps' veya 'min_samples' parametrelerini değiştirmeyi deneyin.")
+            sys.exit(1)
+
+        for label in unique_labels:
+            cluster_indices = np.where(labels == label)[0]
+            random_index = random.choice(cluster_indices)
+            nodes_to_visit.append(int(node_ids[random_index]))
+            
+        print(f"Her kümeden bir temsilci seçilerek toplam {len(nodes_to_visit)} durak oluşturuldu.")
     
     else:
         print(f"HATA: Geçersiz problem stratejisi: '{strategy}'. 'random' veya 'from_scenario' olmalı.")

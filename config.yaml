@@ -5,6 +5,9 @@ problem:
   strategy: "from_scenario"
   num_stops: 10
   scenario_filepath: "data/scenarios/corlu_varsayilan_10_durak.json"
+  dbscan:
+    eps: 0.01
+    main_samples: 5
 
 aco:
   ant_count: 20
