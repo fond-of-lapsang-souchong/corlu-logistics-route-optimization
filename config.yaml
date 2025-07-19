@@ -3,21 +3,28 @@ location:
 
 problem:
   strategy: "from_scenario"
-  num_stops: 10
   scenario_filepath: "data/scenarios/corlu_varsayilan_10_durak.json"
+  
+  random_stops:
+    num_stops: 15
+    min_demand: 1
+    max_demand: 10
+  
   dbscan:
-    eps: 0.01
-    main_samples: 5
+    eps: 0.01 
+    min_samples: 5
 
 aco:
-  ant_count: 20
+  # Araç filosu ve kapasiteleri. Karınca sayısı bu listenin uzunluğu kadar olacaktır.
+  vehicle_fleet: [50, 50]
 
+  # Bir aracın depodan her çıkışının kilometre cinsinden ek maliyeti.
+  vehicle_fixed_cost: 0.0
+
+  # Algoritma parametreleri
   iterations: 50
-
   alpha: 1.0
-
-  beta: 5.0
-
+  beta: 2.0
   evaporation_rate: 0.5
 
 output:
