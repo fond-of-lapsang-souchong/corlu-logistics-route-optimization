@@ -3,7 +3,7 @@ from tqdm import tqdm
 from typing import List, Tuple, Dict
 
 from .ant import Ant
-from ..utils import DistanceCache
+from ..utils import OSRMDistanceProvider 
 
 Graph = nx.MultiDiGraph
 
@@ -32,7 +32,8 @@ class ACOptimizer:
         self.beta = beta
         self.evaporation_rate = evaporation_rate
         
-        self.distance_cache = DistanceCache(self.graph)
+        self.distance_cache = OSRMDistanceProvider(self.graph)
+        
         self.pheromones = self._init_pheromones()
         
         self.ants = [Ant(self.graph, self.start_node, capacity, self.distance_cache) for capacity in self.vehicle_fleet]
@@ -56,14 +57,11 @@ class ACOptimizer:
         return pheromones
 
     def _update_pheromones(self, solutions: List[Tuple[List[List[int]], float]]) -> None:
-        """Updates pheromones based on the cost of the solutions found."""
         for edge in self.pheromones:
             self.pheromones[edge] *= (1 - self.evaporation_rate)
-
         for tours, cost in solutions:
             if cost == float('inf') or cost == 0:
                 continue
-            
             pheromone_deposit = 1.0 / cost
             for tour in tours:
                 for i in range(len(tour) - 1):
@@ -72,29 +70,21 @@ class ACOptimizer:
                         self.pheromones[edge] += pheromone_deposit
 
     def run(self, iterations: int) -> Tuple[List[List[List[int]]], float]:
-        """Runs the main ACO-VRP optimization loop."""
-        
         progress_bar = tqdm(range(iterations), desc="ACO-VRP Optimizasyonu")
-
         for i in progress_bar:
             all_solutions = []
-            
             for ant in self.ants:
                 ant.reset()
-                
                 unvisited_nodes = self.nodes_to_visit.copy()
                 while unvisited_nodes:
                     next_node = ant._select_next_node(self.pheromones, {n: self.nodes_info[n] for n in unvisited_nodes}, self.alpha, self.beta)
                     ant.move_to_node(next_node, self.nodes_info)
                     if next_node in unvisited_nodes:
                         unvisited_nodes.remove(next_node)
-
                 ant.finalize_solution()
-
                 num_tours = len([tour for tour in ant.tours if len(tour) > 2]) 
                 total_cost = ant.total_distance + (num_tours * self.vehicle_fixed_cost)
                 all_solutions.append((ant.tours, total_cost))
-                
                 if total_cost < self.global_best_cost:
                     self.global_best_cost = total_cost
                     self.global_best_solution = ant.tours

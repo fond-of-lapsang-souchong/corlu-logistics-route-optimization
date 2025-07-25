@@ -19,18 +19,30 @@ def vrp_ant_setup():
     if os.path.exists("tests/temp_cache_ant.json"):
         os.remove("tests/temp_cache_ant.json")
 
-def test_ant_selects_visitable_node(vrp_ant_setup):
+def test_ant_selects_visitable_node(vrp_ant_setup, mocker):
     ant, nodes_info = vrp_ant_setup
+    
+    mocker.patch('random.choices', return_value=[2])
+
     ant.current_load = 5
     unvisited = {2, 3, 4}
+    
     next_node = ant._select_next_node({}, {n: nodes_info[n] for n in unvisited}, 1.0, 2.0)
-    assert next_node in [2, 4]
+    
+    assert next_node == 2
+    assert next_node in [2, 4] 
+    assert next_node != 3
 
-def test_ant_returns_to_depot_when_full(vrp_ant_setup):
+def test_ant_returns_to_depot_when_full(vrp_ant_setup, mocker):
     ant, nodes_info = vrp_ant_setup
+    
+    mocker.patch('random.choices', return_value=[ant.start_node])
+
     ant.current_load = 10
     unvisited = {2, 3, 4}
+    
     next_node = ant._select_next_node({}, {n: nodes_info[n] for n in unvisited}, 1.0, 2.0)
+    
     assert next_node == ant.start_node
 
 def test_ant_move_to_node_updates_state(vrp_ant_setup):
