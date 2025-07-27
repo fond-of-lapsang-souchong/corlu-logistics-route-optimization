@@ -69,7 +69,8 @@ python -m src.main --scenario data/scenarios/corlu_merkez_15_durak.json
 İşlem bitince, sonuç haritası projenin ana dizininde `.html` uzantısıyla oluşturulacaktır. Tüm varsayılan ayarlar (araç filosu, optimizasyon parametreleri vb.) için `config.yaml` dosyasına göz atabilirsin.
 
 ### Testleri Çalıştırma
-Projenin temel bileşenlerinin doğru çalıştığını doğrulamak için:```bash
+Projenin temel bileşenlerinin doğru çalıştığını doğrulamak için:
+```bash
 pytest
 ```
 *Not: Testler, OSRM sunucusunun çalışmasını gerektirmeyen birim testleridir.*
