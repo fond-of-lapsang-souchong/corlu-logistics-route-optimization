@@ -2,6 +2,7 @@ import folium
 import osmnx as ox
 import networkx as nx
 import pandas as pd
+import matplotlib.pyplot as plt
 from folium.plugins import MarkerCluster
 from typing import List, Optional, Dict
 
@@ -85,3 +86,35 @@ def plot_optimized_route(
         ).add_to(marker_cluster)
 
     return route_map
+
+def plot_convergence(history: list, filename: str):
+    """
+    Plots the convergence of the algorithm over iterations and saves it to a file.
+    """
+    if not history or all(cost == float('inf') for cost in history):
+        print("UYARI: Geçerli maliyet geçmişi bulunamadı, yakınsama grafiği oluşturulamıyor.")
+        return
+
+    print("Yakınsama grafiği oluşturuluyor...")
+    plt.figure(figsize=(12, 6))
+    
+    history_km = [cost / 1000 if cost != float('inf') else float('nan') for cost in history]
+    
+    plt.plot(history_km, marker='o', linestyle='-', color='b', markersize=4)
+    plt.title('Optimizasyonun İterasyonlara Göre Yakınsaması')
+    plt.xlabel('İterasyon')
+    plt.ylabel('En İyi Maliyet (km-eşdeğeri)')
+    plt.grid(True)
+    
+    valid_costs = [cost for cost in history_km if cost is not None and not (isinstance(cost, float) and cost != cost)]
+    if valid_costs:
+        min_cost = min(valid_costs)
+        min_iter = history_km.index(min_cost)
+        plt.axhline(y=min_cost, color='r', linestyle='--', label=f'En İyi: {min_cost:.2f} km')
+        plt.plot(min_iter, min_cost, 'r*', markersize=15)
+
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(filename)
+    print(f"Yakınsama grafiği başarıyla '{filename}' adresine kaydedildi.")
+    plt.close()

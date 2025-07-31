@@ -11,7 +11,7 @@ class OSRMDistanceProvider:
     Calculates distances by querying a local OSRM server.
     It keeps an in-memory cache to avoid repeated API calls for the same pair.
     """
-    def __init__(self, graph: Graph, host: str = 'http://127.0.0.1:5000'):
+    def __init__(self, graph: Graph, host: str):
         self.host = host
         self.node_coords = self._extract_node_coords(graph)
         self._cache: Dict[Tuple[int, int], float] = {}
