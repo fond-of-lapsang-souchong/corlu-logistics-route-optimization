@@ -1,86 +1,26 @@
 {
-  "name": "Çorlu - Maliyet Testi Senaryosu (20 Durak)",
+  "name": "Çorlu - Maliyet Testi Senaryosu (20 Durak) - Zaman Pencereli",
   "description": "Toplam talebi yüksek, çoklu araç kullanımını teşvik eden test senaryosu.",
+  "depot_node_id": 2237515409,
   "nodes": [
-    [
-      2237515409,
-      0
-    ],
-    [
-      4847324555,
-      7
-    ],
-    [
-      9755502332,
-      9
-    ],
-    [
-      2237677724,
-      8
-    ],
-    [
-      2237557586,
-      8
-    ],
-    [
-      2237841754,
-      9
-    ],
-    [
-      2235022606,
-      13
-    ],
-    [
-      2237315778,
-      13
-    ],
-    [
-      2237635464,
-      5
-    ],
-    [
-      3346617147,
-      5
-    ],
-    [
-      9721702243,
-      11
-    ],
-    [
-      2431590296,
-      11
-    ],
-    [
-      2237609014,
-      7
-    ],
-    [
-      2237488363,
-      15
-    ],
-    [
-      2237316156,
-      11
-    ],
-    [
-      3346617187,
-      8
-    ],
-    [
-      6817538471,
-      11
-    ],
-    [
-      1817471181,
-      7
-    ],
-    [
-      7300996573,
-      15
-    ],
-    [
-      2237557552,
-      6
-    ]
+    { "id": 4847324555, "demand": 7, "time_window_minutes": [480, 600] },
+    { "id": 9755502332, "demand": 9, "time_window_minutes": [480, 660] },
+    { "id": 2237677724, "demand": 8, "time_window_minutes": [540, 720] },
+    { "id": 2237557586, "demand": 8, "time_window_minutes": [600, 780] },
+    { "id": 2237841754, "demand": 9, "time_window_minutes": [660, 840] },
+    { "id": 2235022606, "demand": 13, "time_window_minutes": [720, 900] },
+    { "id": 2237315778, "demand": 13, "time_window_minutes": [780, 960] },
+    { "id": 2237635464, "demand": 5, "time_window_minutes": [840, 1020] },
+    { "id": 3346617147, "demand": 5, "time_window_minutes": [900, 1080] },
+    { "id": 9721702243, "demand": 11, "time_window_minutes": [480, 720] },
+    { "id": 2431590296, "demand": 11, "time_window_minutes": [540, 780] },
+    { "id": 2237609014, "demand": 7, "time_window_minutes": [600, 840] },
+    { "id": 2237488363, "demand": 15, "time_window_minutes": [660, 900] },
+    { "id": 2237316156, "demand": 11, "time_window_minutes": [720, 960] },
+    { "id": 3346617187, "demand": 8, "time_window_minutes": [780, 1020] },
+    { "id": 6817538471, "demand": 11, "time_window_minutes": [840, 1080] },
+    { "id": 1817471181, "demand": 7, "time_window_minutes": [900, 1140] },
+    { "id": 7300996573, "demand": 15, "time_window_minutes": [480, 780] },
+    { "id": 2237557552, "demand": 6, "time_window_minutes": [600, 900] }
   ]
 }

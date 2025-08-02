@@ -9,3 +9,4 @@ cache/
 osrm_data/
 *.csv
 *.png
+.vscode/

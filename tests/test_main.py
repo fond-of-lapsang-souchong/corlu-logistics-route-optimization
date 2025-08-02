@@ -14,15 +14,18 @@ def setup_main_test(mocker):
     """
     main() fonksiyonunu test etmek için gerekli ortamı hazırlar.
     """
-    mocker.patch('src.main.load_graph', return_value=create_mock_graph())
+    mock_graph_obj = create_mock_graph()
+    mocker.patch('src.main.load_graph', return_value=mock_graph_obj)
     
     mock_run_instance = mocker.patch(
         'src.main.run_optimization_instance', 
         return_value=(
-            [[1, 2, 1]],     
-            20.0,           
-            [30.0, 20.0],    
-            0.1             
+            [[1, 2, 1]],     # best_solution
+            20.0,            # best_cost
+            [30.0, 20.0],    # cost_history
+            0.1,             # elapsed_time
+            {1: {'demand': 0}, 2: {'demand': 10}}, # nodes_info_used
+            1                # start_node_used
         )
     )
     

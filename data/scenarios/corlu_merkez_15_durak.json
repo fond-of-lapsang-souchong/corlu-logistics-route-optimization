@@ -1,21 +1,21 @@
 {
-  "name": "Çorlu - Atatürk Meydanı (15 Durak)",
+  "name": "Çorlu - Atatürk Meydanı (15 Durak) - Zaman Pencereli",
   "description": "Çorlu'nun tarihi ve ticari merkezi olan Atatürk Meydanı çevresindeki yoğun duraklar.",
+  "depot_node_id": 4617300832,
   "nodes": [
-    [4617300832, 3],
-    [2237346419, 5],
-    [2237247559, 7],
-    [2237557561, 1],
-    [2237272994, 9],
-    [2237272974, 2],
-    [2234935076, 4],
-    [317753986, 7],
-    [9943870435, 8],
-    [6510605516, 2],
-    [2237557560, 1],
-    [2237515451, 6],
-    [2234934625, 9],
-    [2237272877, 5],
-    [2237557479, 1]
+    { "id": 2237346419, "demand": 5, "time_window_minutes": [540, 720] },
+    { "id": 2237247559, "demand": 7, "time_window_minutes": [540, 660] },
+    { "id": 2237557561, "demand": 1, "time_window_minutes": [600, 720] },
+    { "id": 2237272994, "demand": 9, "time_window_minutes": [600, 780] },
+    { "id": 2237272974, "demand": 2, "time_window_minutes": [660, 840] },
+    { "id": 2234935076, "demand": 4, "time_window_minutes": [720, 900] },
+    { "id": 317753986, "demand": 7, "time_window_minutes": [780, 960] },
+    { "id": 9943870435, "demand": 8, "time_window_minutes": [840, 1020] },
+    { "id": 6510605516, "demand": 2, "time_window_minutes": [900, 1080] },
+    { "id": 2237557560, "demand": 1, "time_window_minutes": [600, 900] },
+    { "id": 2237515451, "demand": 6, "time_window_minutes": [720, 960] },
+    { "id": 2234934625, "demand": 9, "time_window_minutes": [840, 1080] },
+    { "id": 2237272877, "demand": 5, "time_window_minutes": [540, 840] },
+    { "id": 2237557479, "demand": 1, "time_window_minutes": [660, 960] }
   ]
 }

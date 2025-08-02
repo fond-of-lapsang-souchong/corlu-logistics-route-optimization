@@ -8,29 +8,29 @@ Graph = nx.MultiDiGraph
 CacheDict = Dict[Tuple[int, int], float]
 class OSRMDistanceProvider:
     """
-    Calculates distances by querying a local OSRM server.
-    It keeps an in-memory cache to avoid repeated API calls for the same pair.
+    Calculates distances and durations by querying a local OSRM server.
+    Caches results in memory to avoid repeated API calls.
     """
-    def __init__(self, graph: Graph, host: str):
+    def __init__(self, graph: nx.Graph, host: str):
         self.host = host
         self.node_coords = self._extract_node_coords(graph)
-        self._cache: Dict[Tuple[int, int], float] = {}
-        print(f"OSRM Mesafe Sağlayıcı başlatıldı. Sunucu: {self.host}")
+        self._cache: Dict[Tuple[int, int], Tuple[float, float]] = {}
+        print(f"OSRM Mesafe/Süre Sağlayıcı başlatıldı. Sunucu: {self.host}")
 
-    def _extract_node_coords(self, graph: Graph) -> Dict[int, Tuple[float, float]]:
+    def _extract_node_coords(self, graph: nx.Graph) -> Dict[int, Tuple[float, float]]:
         """Extracts longitude and latitude for each node from the graph."""
         coords = {}
         for node, data in graph.nodes(data=True):
             coords[node] = (data['x'], data['y'])
         return coords
 
-    def get_distance(self, u_node: int, v_node: int) -> float:
+    def get_travel_info(self, u_node: int, v_node: int) -> Tuple[float, float]:
         """
-        Gets the driving distance in meters between two nodes.
-        First checks the local cache, then queries the OSRM server if not found.
+        Gets the driving distance (meters) and duration (minutes) between two nodes.
+        Checks cache first, then queries OSRM.
         """
         if u_node == v_node:
-            return 0.0
+            return 0.0, 0.0
 
         edge = tuple(sorted((u_node, v_node)))
         if edge in self._cache:
@@ -40,8 +40,8 @@ class OSRMDistanceProvider:
             lon1, lat1 = self.node_coords[u_node]
             lon2, lat2 = self.node_coords[v_node]
         except KeyError as e:
-            print(f"HATA: Düğüm ID'si {e} için koordinat bulunamadı.")
-            return float('inf')
+            print(f"UYARI: Düğüm ID'si {e} için koordinat bulunamadı.")
+            return float('inf'), float('inf')
 
         url = f"{self.host}/route/v1/driving/{lon1},{lat1};{lon2},{lat2}?overview=false"
 
@@ -51,24 +51,34 @@ class OSRMDistanceProvider:
             data = response.json()
             
             if data['code'] == 'Ok' and data.get('routes'):
-                distance_meters = data['routes'][0]['distance']
-                self._cache[edge] = distance_meters
-                return distance_meters
+                route_info = data['routes'][0]
+                distance_meters = route_info['distance']
+                duration_minutes = route_info['duration'] / 60.0
+                
+                result = (distance_meters, duration_minutes)
+                self._cache[edge] = result
+                return result
             else:
-                print(f"UYARI: OSRM {u_node} ve {v_node} arasında rota bulamadı. Cevap: {data.get('code')}")
-                self._cache[edge] = float('inf')
-                return float('inf')
+                return float('inf'), float('inf')
 
         except requests.exceptions.RequestException as e:
-            print(f"KRİTİK HATA: OSRM sunucusuna bağlanılamadı ({self.host}). Docker container'ının çalıştığından emin olun. Hata: {e}")
-            return float('inf')
+            print(f"KRİTİK HATA: OSRM sunucusuna bağlanılamadı. Hata: {e}")
+            return float('inf'), float('inf')
+
+    def get_distance(self, u_node: int, v_node: int) -> float:
+        """
+        Gets only the driving distance in meters.
+        This is for backward compatibility with parts of the code
+        that only need distance, like pheromone initialization.
+        """
+        distance, _ = self.get_travel_info(u_node, v_node)
+        return distance
 
     def save_to_disk(self):
         """
-        This method exists for compatibility with the optimizer's call.
-        The OSRM cache is in-memory and not saved by default.
+        This method exists for compatibility.
         """
-        print(f"OSRM oturum önbelleğinde {len(self._cache)} adet mesafe biriktirildi.")
+        print(f"OSRM oturum önbelleğinde {len(self._cache)} adet seyahat bilgisi (mesafe/süre) biriktirildi.")
 
 class DistanceCache:
     """

@@ -1,16 +1,16 @@
 {
-  "name": "Çorlu Varsayılan Senaryo (10 Durak)",
-  "description": "Çorlu şehir merkezinden ve çevresinden rastgele seçilmiş 10 durak içeren standart test senaryosu.",
-  "nodes": [
-    [12824907013, 7],
-    [2237320493, 3],
-    [2234950132, 5],
-    [2270207023, 8],
-    [9726230592, 2],
-    [2234934786, 9],
-    [4183264109, 4],
-    [1838160595, 6],
-    [2237330399, 5],
-    [3346617690, 7]
-  ]
+"name": "Çorlu Varsayılan Senaryo (10 Durak) - Zaman Pencereli",
+"description": "Çorlu şehir merkezinden ve çevresinden rastgele seçilmiş 10 durak içeren standart test senaryosu.",
+"depot_node_id": 12824907013,
+"nodes": [
+{ "id": 2237320493, "demand": 3, "time_window_minutes": [480, 600] },
+{ "id": 2234950132, "demand": 5, "time_window_minutes": [540, 660] },
+{ "id": 2270207023, "demand": 8, "time_window_minutes": [600, 720] },
+{ "id": 9726230592, "demand": 2, "time_window_minutes": [660, 780] },
+{ "id": 2234934786, "demand": 9, "time_window_minutes": [720, 840] },
+{ "id": 4183264109, "demand": 4, "time_window_minutes": [780, 900] },
+{ "id": 1838160595, "demand": 6, "time_window_minutes": [840, 960] },
+{ "id": 2237330399, "demand": 5, "time_window_minutes": [900, 1020] },
+{ "id": 3346617690, "demand": 7, "time_window_minutes": [960, 1080] }
+]
 }

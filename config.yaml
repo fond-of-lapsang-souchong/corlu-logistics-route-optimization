@@ -2,13 +2,21 @@ location:
   place_name: "Çorlu, Tekirdağ, Türkiye"
 
 problem:
-  strategy: "from_scenario"
+  strategy: "random"
   scenario_filepath: "data/scenarios/corlu_varsayilan_10_durak.json"
   
   random_stops:
     num_stops: 15
     min_demand: 1
     max_demand: 10
+
+  default_service_time_minutes: 10
+
+  random_time_windows:
+    earliest_start_minute: 480
+    latest_start_minute: 720
+    min_duration_minutes: 60
+    max_duration_minutes: 180
   
   dbscan:
     eps: 0.01 

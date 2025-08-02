@@ -1,21 +1,21 @@
 {
-  "name": "Çorlu - Önerler (15 Durak)",
+  "name": "Çorlu - Önerler (15 Durak) - Zaman Pencereli",
   "description": "Önerler mevkii çevresindeki daha dağınık yerleşimli duraklar.",
+  "depot_node_id": 2244765262,
   "nodes": [
-    [2244765262, 1],
-    [2244765295, 3],
-    [2244765216, 5],
-    [1347880643, 7],
-    [2244765319, 9],
-    [2244765172, 2],
-    [2244765189, 4],
-    [2244765237, 6],
-    [9755502378, 8],
-    [2244765180, 2],
-    [3357195786, 7],
-    [2244765096, 1],
-    [9755505530, 9],
-    [3357195746, 4],
-    [2244765263, 6]
+    { "id": 2244765295, "demand": 3, "time_window_minutes": [600, 720] },
+    { "id": 2244765216, "demand": 5, "time_window_minutes": [600, 780] },
+    { "id": 1347880643, "demand": 7, "time_window_minutes": [660, 840] },
+    { "id": 2244765319, "demand": 9, "time_window_minutes": [720, 900] },
+    { "id": 2244765172, "demand": 2, "time_window_minutes": [780, 960] },
+    { "id": 2244765189, "demand": 4, "time_window_minutes": [840, 1020] },
+    { "id": 2244765237, "demand": 6, "time_window_minutes": [900, 1080] },
+    { "id": 9755502378, "demand": 8, "time_window_minutes": [600, 840] },
+    { "id": 2244765180, "demand": 2, "time_window_minutes": [720, 960] },
+    { "id": 3357195786, "demand": 7, "time_window_minutes": [840, 1080] },
+    { "id": 2244765096, "demand": 1, "time_window_minutes": [660, 900] },
+    { "id": 9755505530, "demand": 9, "time_window_minutes": [780, 1020] },
+    { "id": 3357195746, "demand": 4, "time_window_minutes": [900, 1140] },
+    { "id": 2244765263, "demand": 6, "time_window_minutes": [720, 1020] }
   ]
 }

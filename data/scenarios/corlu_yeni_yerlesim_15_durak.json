@@ -1,21 +1,21 @@
 {
-  "name": "Çorlu - Yeni Yerleşim (15 Durak)",
+  "name": "Çorlu - Yeni Yerleşim (15 Durak) - Zaman Pencereli",
   "description": "Çorlu'nun gelişen yeni yerleşim bölgelerinden birindeki duraklar.",
+  "depot_node_id": 2237842432,
   "nodes": [
-    [2237842432, 5],
-    [2237842673, 1],
-    [2237842486, 9],
-    [4617280873, 3],
-    [4756218065, 7],
-    [4617274356, 2],
-    [4617274355, 4],
-    [9914422150, 8],
-    [2237842652, 6],
-    [2237842534, 5],
-    [4617287588, 3],
-    [2237842706, 9],
-    [2237842294, 7],
-    [2237842429, 6],
-    [2237842130, 8]
+    { "id": 2237842673, "demand": 1, "time_window_minutes": [540, 660] },
+    { "id": 2237842486, "demand": 9, "time_window_minutes": [540, 720] },
+    { "id": 4617280873, "demand": 3, "time_window_minutes": [600, 780] },
+    { "id": 4756218065, "demand": 7, "time_window_minutes": [660, 840] },
+    { "id": 4617274356, "demand": 2, "time_window_minutes": [720, 900] },
+    { "id": 4617274355, "demand": 4, "time_window_minutes": [780, 960] },
+    { "id": 9914422150, "demand": 8, "time_window_minutes": [840, 1020] },
+    { "id": 2237842652, "demand": 6, "time_window_minutes": [900, 1080] },
+    { "id": 2237842534, "demand": 5, "time_window_minutes": [600, 900] },
+    { "id": 4617287588, "demand": 3, "time_window_minutes": [720, 960] },
+    { "id": 2237842706, "demand": 9, "time_window_minutes": [840, 1080] },
+    { "id": 2237842294, "demand": 7, "time_window_minutes": [660, 960] },
+    { "id": 2237842429, "demand": 6, "time_window_minutes": [780, 1080] },
+    { "id": 2237842130, "demand": 8, "time_window_minutes": [900, 1140] }
   ]
 }
