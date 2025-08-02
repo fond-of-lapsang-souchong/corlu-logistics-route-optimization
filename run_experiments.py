@@ -57,11 +57,17 @@ def run_experiments():
                 elif params['strategy'] == 'mmas':
                     current_config['aco']['mmas']['rho'] = params['rho']
                 
-                _, best_cost, _, elapsed_time = run_optimization_instance(
+                results = run_optimization_instance(
                     current_config, 
                     G_directed, 
                     G_undirected
                 )
+
+                if results is None:
+                    print("  -> Bu çalıştırma başarısız oldu, atlanıyor.")
+                    continue
+
+                best_solution, best_cost, cost_history, elapsed_time, nodes_info_used, start_node_used = results
 
                 if best_cost is not None and best_cost != float('inf'):
                     costs.append(best_cost / 1000)
