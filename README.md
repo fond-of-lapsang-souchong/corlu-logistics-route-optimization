@@ -1,4 +1,4 @@
-# Proje: ACO-TR-LOGISTICS
+# Ölçeklenebilir Rota Optimizasyon Modeli (Pilot Uygulama: Çorlu Lojistik Ağı)
 
 Bu proje, Karınca Kolonisi Optimizasyonu (ACO) algoritmasının arkasındaki mantığı anlamak ve gerçek dünya verileriyle denemek için kişisel bir hevesle geliştirilmiştir.
 
